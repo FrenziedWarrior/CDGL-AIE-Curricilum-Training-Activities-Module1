@@ -55,6 +55,8 @@ def player_move(board, symbol):
     while move not in range(1, 10) or not board[move - 1].isdigit():
         try:
             move = int(input("Enter your move (1-9): "))
+            if move not in range(1, 10) or not board[move - 1].isdigit():
+                print("Invalid move. Please try again.")
         except ValueError:
             print("Please enter a number between 1 and 9")
 
@@ -62,7 +64,7 @@ def player_move(board, symbol):
 
 
 # ==========================================================
-# TODO 2: ai_move(board, ai_symbol, player_symbol)
+# ai_move(board, ai_symbol, player_symbol)
 # ==========================================================
 def ai_move(board, ai_symbol, player_symbol):
     # Case A: Check if AI can win in 1 move
@@ -93,14 +95,6 @@ def ai_move(board, ai_symbol, player_symbol):
 # Have any of the winning combinations been marked by a player?
 # ==========================================================
 def check_win(board, symbol):
-    win_conditions = [
-        (0, 1, 2), (3, 4, 5), (6, 7, 8),    # Horizontal
-
-        (0, 3, 6), (1, 4, 7), (2, 5, 8),    # Vertical
-
-        (0, 4, 8), (2, 4, 6)                # Diagonal
-    ]
-
     for cond in win_conditions:
         if board[cond[0]] == board[cond[1]] == board[cond[2]] == symbol:
             return True
