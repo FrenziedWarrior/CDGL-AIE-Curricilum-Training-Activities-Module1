@@ -3,18 +3,23 @@ from textblob import TextBlob
 from colorama import init, Fore
 init(autoreset=True)
 
-try:
-    df = pd.read_csv("Lesson 6/imdb_top_1000.csv")
-except FileNotFoundError:
-    print(Fore.RED + "Error: The file 'imdb_top_1000.csv' was not found.")
-    raise SystemExit
+def load_data(file_path='imdb_top_1000.csv'):
+    try:
+        df = pd.read_csv(file_path)
+        return df
+    except FileNotFoundError:
+        print(Fore.RED + "Error: The file 'imdb_top_1000.csv' was not found.")
+        raise SystemExit
 
-genres = sorted({g.strip() for xs in df["Genre"].dropna().str.split(", ") for g in xs})
+
+movies_df = load_data()
+
+genres = sorted({genre.strip() for sublist in movies_df["Genre"].dropna().str.split(", ") for genre in sublist})
 
 
 # Filters movies by genre and rating, checks overview sentiment, and returns up to n recommendations
 def recommend(genre=None, mood=None, rating=None, n=5):
-    d = df
+    d = movies_df
     if genre:
         d = d[d["Genre"].str.contains(genre, case=False, na=False)]
     if rating is not None:
